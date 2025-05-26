@@ -24,7 +24,7 @@ pipeline
         {
             steps
             {
-                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'ad19cda2-7e58-4fc5-a5a7-8c07b6abeeac', path: '', url: 'http://172.31.87.13:8080/')], contextPath: 'scm', war: '**/*.war'
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'ad19cda2-7e58-4fc5-a5a7-8c07b6abeeac', path: '', url: 'http://172.31.87.13:8080/')], contextPath: 'scm-qa', war: '**/*.war'
             }
         }
         stage ('Continuos-Testing')
