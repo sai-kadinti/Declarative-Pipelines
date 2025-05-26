@@ -24,7 +24,7 @@ pipeline
         {
             steps
             {
-                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'ad19cda2-7e58-4fc5-a5a7-8c07b6abeeac', path: '', url: 'http://172.31.87.13:8080/')], contextPath: 'scm-qa', war: '**/*.war'
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd34255da-6028-4b32-93d3-a47cdefbea39', path: '', url: 'http://172.31.87.13:8080/')], contextPath: 'scm-qa', war: '**/*.war'
             }
         }
         stage ('Continuos-Testing')
@@ -40,7 +40,7 @@ pipeline
             steps
             {
                 input message: 'Please approve the deployent', submitter: 'Manager'
-                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'ad19cda2-7e58-4fc5-a5a7-8c07b6abeeac', path: '', url: 'http://172.31.92.132:8080/')], contextPath: 'scm', war: '**/*.war'
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd34255da-6028-4b32-93d3-a47cdefbea39', path: '', url: 'http://172.31.92.132:8080/')], contextPath: 'scm', war: '**/*.war'
             }
         }
         stage ('Post-Build')
