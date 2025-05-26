@@ -32,7 +32,7 @@ pipeline
             steps
             {
                 git 'https://github.com/sai-kadinti/FunctionalTesting.git'
-                sh 'java -jar /home/ubuntu/jenkins/workspace/ScriptedPipeline/testing.jar'
+                sh 'java -jar /var/lib/jenkins/workspace/DeclarativeSCM/testing.jar'
             }
         }
         stage ('Continuos-Delivery')
