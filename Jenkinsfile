@@ -6,28 +6,28 @@ pipeline
     }
     stages
     {
-        stage ('Continuos-Download')
+        stage ('Continuous-Download')
         {
             steps
             {
                 git 'https://github.com/sai-kadinti/intelliQ-MavenJava.git'
             }
         }
-        stage ('Continuos-Build')
+        stage ('Continuous-Build')
         {
             steps
             {
                 sh 'mvn package'
             }
         }
-        stage ('Continuos-Deployment')
+        stage ('Continuous-Deployment')
         {
             steps
             {
-                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd34255da-6028-4b32-93d3-a47cdefbea39', path: '', url: 'http://172.31.87.13:8080/')], contextPath: 'scm-qa', war: '**/*.war'
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd34255da-6028-4b32-93d3-a47cdefbea39', path: '', url: 'http://172.31.87.13:8080/')], contextPath: 'scm-qa1', war: '**/*.war'
             }
         }
-        stage ('Continuos-Testing')
+        stage ('Continuous-Testing')
         {
             steps
             {
@@ -35,19 +35,19 @@ pipeline
                 sh 'java -jar /var/lib/jenkins/workspace/DeclarativeSCM/testing.jar'
             }
         }
-        stage ('Continuos-Delivery')
+        stage ('Continuous-Delivery')
         {
             steps
             {
-                input message: 'Please approve the deployent', submitter: 'Manager'
-                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd34255da-6028-4b32-93d3-a47cdefbea39', path: '', url: 'http://172.31.92.132:8080/')], contextPath: 'scm', war: '**/*.war'
+                input message: 'Please approve the deployment', submitter: 'Manager'
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'd34255da-6028-4b32-93d3-a47cdefbea39', path: '', url: 'http://172.31.92.132:8080/')], contextPath: 'scm-prod1', war: '**/*.war'
             }
         }
         stage ('Post-Build')
         {
             steps
             {
-                echo "Deployment succeed access the link http://3.93.232.4:8080/scm/"
+                echo "Deployment succeeded access the link http://3.93.232.4:8080/scm/"
             }
         }
     }
