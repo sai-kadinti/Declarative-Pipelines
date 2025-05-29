@@ -1,0 +1,87 @@
+pipeline
+{
+    agent any
+    stages
+    {
+        stage ('Cont-Download')
+        {
+            steps
+            {
+                script
+                {
+                    try
+                    {
+                        git 'https://github.com/krishnain/mavenab.git'
+                    }
+                    catch (Exception e2)
+                    {
+                        mail bcc: '', body: 'Cont-Download failed:  Pipeline failed at Cont-Download failed', cc: 'git.admin@gmail.com', from: '', replyTo: '', subject: 'Cont-Download failed', to: 'git.admin@gmail.com'
+                    }
+                }
+            }
+        }
+        stage ('Cont-Build')
+        {
+            steps 
+            {
+                script
+                {
+                    try
+                    {
+                        sh 'mvn package'
+                    }
+                    catch (Exception e2)
+                    {
+                        mail bcc: '', body: 'Cont-Build failed:  Pipeline failed at Cont-Build failed', cc: '', from: '', replyTo: '', subject: 'Cont-Build failed', to: 'mvn.admin@gmail.com'
+                    }
+                }
+            }
+        }
+        stage ('Cont-Deployment')
+        {
+            steps
+            {
+                script
+                {
+                    try
+                    {
+                        sh 'scp /var/lib/jenkins/workspace/ExceptionHandling/webapp/target/webapp.war ubuntu@172.31.87.13:/var/lib/tomcat10/webapps/except.war'
+                    }
+                    catch (Exception e2)
+                    {
+                        mail bcc: '', body: 'Cont-Deployment failed:  Pipeline failed at Cont-Deployment failed', cc: '', from: '', replyTo: '', subject: 'Cont-Deployment failed', to: 'qa.admin@gmail.com'
+                    }
+                }
+            }
+        }
+        stage ('Cont-Testing')
+        {
+            steps
+            {
+                script
+                {
+                    try
+                    {
+                        git 'https://github.com/sai-kadinti/FunctionalTesting.git'
+                        sh 'java -jar /var/lib/jenkins/workspace/ExceptionHandling/testing.jar'
+                    }
+                    catch (Exception e2)
+                    {
+                        mail bcc: '', body: 'Cont-Testing failed:  Pipeline failed at Cont-Testing failed', cc: '', from: '', replyTo: '', subject: 'Cont-Testing failed', to: 'test.admin@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+    post
+    {
+        success
+        {
+            sh 'scp /var/lib/jenkins/workspace/ExceptionHandling/webapp/target/webapp.war ubuntu@172.31.92.132:/var/lib/tomcat10/webapps/except.war'
+        }
+        failure
+        {
+            sh 'echo "Pipeline failed"'
+        }
+    }
+}
