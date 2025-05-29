@@ -1,0 +1,47 @@
+pipeline
+{
+    agent any
+    stages
+    {
+        stage ('Cont-download ')
+        {
+            steps
+            {
+                git 'https://github.com/sai-kadinti/intelliQ-MavenJava.git'
+            }
+        }
+        stage ('Cont-build')
+        {
+            steps
+            {
+                sh 'mvn package'
+            }
+        }
+        stage ('Cont-Deployment')
+        {
+            steps
+            {
+                sh 'scp /var/lib/jenkins/workspace/PostConditions/webapp/target/webapp.war ubuntu@172.31.87.13:/var/lib/tomcat10/webapps/post.war'
+            }
+        }
+        stage ('Cont-Testing')
+        {
+            steps
+            {
+                git 'https://github.com/sai-kadinti/FunctionalTesting.git'
+                sh 'java -jar /var/lib/jenkins/workspace/PostConditions/testing.jar'
+            }
+        }
+    }
+    post
+    {
+        success
+        {
+            sh 'scp /var/lib/jenkins/workspace/PostConditions/webapp/target/webapp.war ubuntu@172.31.92.132:/var/lib/tomcat10/webapps/post.war'
+        }
+        failure
+        {
+            sh 'echo "Pipeline failed"'
+        }
+    }
+}
